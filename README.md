@@ -14,8 +14,8 @@
 ### Gekkou
 Gekkou [![NPM version]](https://npmjs.com/package/gekkou)
 
-## Bot commands
-**Normal commands**
+## Bot-chat commands
+### Normal commands
 ```
 -welcome
   output:
@@ -37,8 +37,10 @@ Gekkou [![NPM version]](https://npmjs.com/package/gekkou)
   output:
 ```
 
-**Content Wiki commands**
+## Content Wiki commands
 ```
 $edit;pagename;content;summary
 $move;to;from;summary
 ```
+
+**La mayoria de los archivos aqui creados fueron hechos para su uso en This site was built using [Comunidad Central](http://comunidad.wikia.com/).
