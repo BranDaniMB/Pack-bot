@@ -1,4 +1,9 @@
-const summary = "Añadiendo o modificando [[Plantilla:Usoimagen|plantilla Usoimagen]]";
+/*
+ * Categorizar imágenes por espacio de nombres en que son usadas
+ * Ejemplo de categorización de imágenes de usuario por medio de la plantilla usoimagen
+*/
+
+const summary = "";
 const bot = require('nodemw'), client = new bot('./config.json');
 const tools = require("../tools.js"), currentLogs = "./registro.txt";
 const userPages = require("./CreateUserPages.js");
