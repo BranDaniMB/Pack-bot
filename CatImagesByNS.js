@@ -1,6 +1,7 @@
 /*
  * Categorizar imágenes por espacio de nombres en que son usadas
  * Ejemplo de categorización de imágenes de usuario por medio de la plantilla usoimagen
+ ** Requiere Nodemw
 */
 
 const summary = "";
