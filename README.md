@@ -1,5 +1,5 @@
 # Pack-bot
-## Requirements
+## Requerimientos
 ### nodejs
 - [NodeJS](https://nodejs.org/en/download/ "Latest version recommended.")
 
@@ -14,8 +14,8 @@
 ### Gekkou
 Gekkou [![NPM version]](https://npmjs.com/package/gekkou)
 
-## Bot-chat commands
-### Normal commands
+## Bot-chat comandos
+### Normal comandos
 ```
 -welcome
   output:
@@ -37,10 +37,21 @@ Gekkou [![NPM version]](https://npmjs.com/package/gekkou)
   output:
 ```
 
-## Content Wiki commands
+### Edición Wiki comandos
 ```
 $edit;pagename;content;summary
 $move;to;from;summary
+```
+
+## Crear config.json
+Crear un archivo llamado **config** con extensión **.json** e incluir lo sigiente dentro:
+```
+{
+    "server": "comunidad.wikia.com",
+    "debug": true,
+    "username": "Ejemplo",
+    "password": "Ejemplo"
+}
 ```
 
 **La mayoria de los archivos aquí expuestos fueron hechos para su uso en [Comunidad Central](http://comunidad.wikia.com/).**
