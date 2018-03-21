@@ -1,5 +1,7 @@
 // Requiere tools.js
 const tools = require("../tools.js");
+// Crear páginas de usuario
+const userPages = require("./CreateUserPages.js");
 
 // Asignar nombre de usuario, contraseña, servidor.
 const currentUsername = "", currentPassword = "", currentServer = "";
@@ -27,6 +29,9 @@ const editClient = new editBot({
     password: currentPassword,
     debug: true,
 });
+
+//Crear páginas de usuario
+userPages.CreateUserPages;
 
 // Mensaje de acceso al chat
 chatClient.on("ready", () => {
