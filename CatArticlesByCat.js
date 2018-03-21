@@ -1,3 +1,8 @@
+/*
+ * Reparar usos de la plantilla usoimagen en Comunidad Central
+ ** Requiere de Nodemw
+*/
+
 const summary = "Añadiendo o modificando [[Plantilla:Usoimagen|plantilla Usoimagen]]";
 const bot = require('nodemw'), client = new bot('./config.json');
 const tools = require("../tools.js"), currentLogs = "./registro.txt";
