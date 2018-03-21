@@ -1,12 +1,25 @@
+// Requiere tools.js
 const tools = require("../tools.js");
+
+// Asignar nombre de usuario, contraseña, servidor.
 const currentUsername = "", currentPassword = "", currentServer = "";
-var contentEdit = true, logs = false, currentLogs = "./example.txt";
+
+// Habilitar editar desde el chat
+var contentEdit = true;
+// Habilitar registros
+var logs = false;
+// Archivo de registros, sino se asigna ningun valor el registro se llevara a cabo mediante la consola
+var currentLogs = "./example.txt";
+// Agrega los nombres de los usuarios que tienen permisos de administrador del bot
 const sysops = [];
+// Array con los usuarios que ya han ingresado al chat despues del bot.
 var usersWelcome = [];
 
+//Crear instancia del bot usando Gekkou
 const chatBot = require("gekkou");
 const chatClient = new chatBot(currentUsername, currentPassword);
 
+//Crear instancia del bot usando Nodemw
 const editBot = require("nodemw");
 const editClient = new editBot({
     server: currentServer + ".wikia.com",
@@ -15,10 +28,12 @@ const editClient = new editBot({
     debug: true,
 });
 
+// Mensaje de acceso al chat
 chatClient.on("ready", () => {
     console.log("Power-on");
 });
 
+// Ingreso de usuarios al chat y su respectivo saludo
 chatClient.on("userJoin", (join) => {
     if (!usersWelcome.includes(join.id)) {
         usersWelcome.push(join.id);
@@ -33,7 +48,9 @@ chatClient.on("userJoin", (join) => {
     }
 });
 
+// Cada vez que el usuario emite un mensaje
 chatClient.on("messageCreate", (msg) => {
+    // Verifica el mensaje como comando
     if (msg.author.id !== chatClient.username && msg.content.startsWith('/')) {
         const regex = /(\w+|".+?")/;
         let args = msg.content.slice(1).trim().split(regex);
@@ -49,29 +66,37 @@ chatClient.on("messageCreate", (msg) => {
         }
 
         const command = args.shift().toLowerCase();
-
+        
+        // Bienvenida
         if (command === "welcome") {
             chatClient.createMessage(msg.room.id, "¡Bienvenid@ al chat!\n¡Espero que tu estancia sea la mejor!");
             register(msg, command);
+        // Saludar al bot
         } else if (command === "hello") {
             chatClient.createMessage(msg.room.id, "¡Hola " + msg.author.username + "!");
             register(msg, command);
+        // Despedirse del bot
         } else if (command === "bye") {
             chatClient.createMessage(msg.room.id, "¡Adiós " + msg.author.username + "!");
             register(msg, command);
+        // Obtener el tiempo UTC - no funcional
         } else if (command === "time") {
             chatClient.createMessage(msg.room.id, toString(tools.date(new Date())));
             register(msg, command);
+        // Saludar a todos
         } else if (command === "greet" && sysops.includes(msg.author.username)) {
             chatClient.createMessage(msg.room.id, "¡Hola a todos!");
             register(msg, command);
+        // Sacar al bot del chat
         } else if (command === "exit" && sysops.includes(msg.author.username)) {
             chatClient.createMessage(msg.room.id, "¡Adiós a todos!");
             register(msg, command);
             chatClient.disconnect();
+        // Obtener ayuda del bot - modificar según sea necesario.
         } else if (command === "help") {
             chatClient.createMessage(msg.room.id, "¡Hola!, me llamo" + currentUsername + ".");
             register(msg, command);
+        // Desactivar o activar la funcionalidad de edición, mover o borrar - Activada por defecto
         } else if (command === "edit" && sysops.includes(msg.author.username)) {
             if (contentEdit && args[0] === "on") {
                 chatClient.createMessage(msg.room.id, "La función de edición ya estaba activa.");
@@ -91,6 +116,7 @@ chatClient.on("messageCreate", (msg) => {
                 chatClient.createMessage(msg.room.id, "Funcionalidad: " + contentEdit);
                 register(msg, command);
             }
+        // Desactivar o activar la funcionalidad de registro - Desactivada por defecto
         } else if (command === "logs" && sysops.includes(msg.author.username)) {
             if (logs && args[0] === "on") {
                 chatClient.createMessage(msg.room.id, "La función de registro ya estaba activa.");
@@ -116,6 +142,7 @@ chatClient.on("messageCreate", (msg) => {
                 chatClient.createMessage(msg.room.id, "Funcionalidad: " + logs);
                 register(msg, command);
             }
+        // Editar
         } else if (contentEdit && command === 'fedit' && args.length === 3 && sysops.includes(msg.author.username)) {
             chatClient.createMessage(msg.room.id, "Editando...");
             editClient.logIn(function () {
@@ -124,6 +151,7 @@ chatClient.on("messageCreate", (msg) => {
                     register(msg, command);
                 });
             });
+        // Mover
         } else if (contentEdit && command === 'fmove' && args.length === 3 && sysops.includes(msg.author.username)) {
             chatClient.createMessage(msg.room.id, "Moviendo...");
             editClient.logIn(function () {
@@ -132,6 +160,7 @@ chatClient.on("messageCreate", (msg) => {
                     register(msg, command);
                 });
             });
+        // Borrar - no funcional
         } else if (contentEdit && command === 'fdelete' && args.length === 2 && sysops.includes(msg.author.username)) {
             chatClient.createMessage(msg.room.id, "Borrando...");
             editClient.logIn(function () {
@@ -140,37 +169,45 @@ chatClient.on("messageCreate", (msg) => {
                     register(msg, command);
                 });
             });
+        // Obtener información del wiki
         } else if (command === 'siteinfo' && sysops.includes(msg.author.username)) {
             editClient.getSiteInfo(['general', 'namespaces'], function (err, info) {
                 chatClient.createMessage(msg.room.id, "URL: " + info.general.base + "\nSitename: " + info.general.sitename + "\nLang: " + info.general.lang + "\nServer: " + info.general.server + "\nMediaWiki Version: " + info.general.generator);
                 register(msg, command);
             });
+        // Obtener espacios MediaWiki principales de un wiki
         } else if (command === 'mediawiki' && sysops.includes(msg.author.username)) {
             editClient.getSiteInfo(['general'], function (err, info) {
                 chatClient.createMessage(msg.room.id, "Common.css: " + info.general.server + "/MediaWiki:Common.css" + "\nCommon.js: " + info.general.server + "/MediaWiki:Common.js" + "\nWikia.css: " + info.general.server + "/MediaWiki:Wikia.css" + "\nWikia.js: " + info.general.server + "/MediaWiki:Wikia.js" + "\nPersonal.css: " + info.general.server + "/Special:mypage/wikia.css" + "\nPersonal.js: " + info.general.server + "/Special:mypage/wikia.js" + "\nImportJS: " + info.general.server + "/MediaWiki:ImportJS");
                 register(msg, command);
             });
+        // Obtener estadisticas
         } else if (command === 'sitestats' && sysops.includes(msg.author.username)) {
             editClient.getSiteStats(function (err, stats) {
                 chatClient.createMessage(msg.room.id, "Pages: " + stats.pages + "\nArticles: " + stats.articles + "\nImages: " + stats.images + "\nAdmis: " + stats.admins);
                 register(msg, command);
             });
+        // Obtener avatar
         } else if (command === 'getavatar') {
             editClient.wikia.getUser(msg.author.id, function (err, userInfo) {
                 chatClient.createMessage(msg.room.id, "Avatar de usuario: " + userInfo.avatar);
                 register(msg, command);
             });
+        // Mensaje de comando inexistente
         } else {
             chatClient.createMessage(msg.room.id, "Error, opción innexistente: " + command + ".");
             register(msg, command);
         }
-    } else if (msg.author.id !== currentUsername) {
+    } else {
+        // Mensaje no es un comando entonces se registra su contenido.
         register(msg);
     }
 });
 
+// Conectar al servidor de chat en la wiki especificada
 chatClient.connect(currentServer);
 
+// Función de registro ya sea en consola o un archivo en especifico - Inicia apagada
 function register(msg, command) {
     if (logs) {
         if (command !== undefined && currentLogs !== undefined) {
