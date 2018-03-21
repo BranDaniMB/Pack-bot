@@ -43,4 +43,4 @@ $edit;pagename;content;summary
 $move;to;from;summary
 ```
 
-**La mayoria de los archivos aqui creados fueron hechos para su uso en This site was built using [Comunidad Central](http://comunidad.wikia.com/).
+**La mayoria de los archivos aqui creados fueron hechos para su uso en This site was built using [Comunidad Central](http://comunidad.wikia.com/).**
