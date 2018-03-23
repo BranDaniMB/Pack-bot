@@ -15,6 +15,7 @@
 Gekkou [![NPM version]](https://npmjs.com/package/gekkou)
 
 ## Bot-chat comandos
+***Esta sección no ha sido actualizada***
 ### Normal comandos
 ```
 -welcome
